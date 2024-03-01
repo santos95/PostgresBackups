@@ -83,6 +83,11 @@ The cluster named running PostgreSQL 10. To check this cluster service status, w
 ### Reload service
     systemctl reload postgresql
 
+### pg_lsclusters
+show information about all PostgreSQL clusters
+
+    pg_clusters
+
 ## Connect to postgresql 
 First, the installations create a system user called postgres. First we need to change to that user:
     su - postgres 

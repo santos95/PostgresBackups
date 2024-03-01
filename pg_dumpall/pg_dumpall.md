@@ -49,6 +49,31 @@ THe option --no-sync indicates to pg_dumpall to do not wait for checkpoints, whi
 
 ### -c - Clean - Clean all the objects and then recreate them. Generates a sql script file with a logic order of instructions that first drop the objects, drop database, drop tablespace, drop roles and then recreates them, first roles, then tablespaces and the database and all their objects (tables, constrains, indexes, data...)
 
+## to generate a backup with drop objects intructions - also add the if exists - drop if the object exists
+## Then recreate the objects  and the data
+## -c - drop the objects
+pg_dumpall -p 5433 -w -U postgres -f $workdir/pgdumpall_clean.sql -c --if-exists -v
+
+
+## -s - schema only -> backup for the schema / include only the database structure
+pg_dumpall -p 5433 -w -U postgres -f $workdir/pgdumpall_schema.sql -s
+
+## -a - this option create a backup with the data only
+pg_dumpall -p 5433 -w -U postgres -f $workdir/pgdumpall_data.sql -a -v
+
+## -g - Only backup de global objects -> in this case only creates a backup of tablespaces and roles
+pg_dumpall -p 5433 -w -U postgres -f $workdir/pgdumpall_global.sql -g  -c
+
+## -r - roles only -> creates a backup only for the database roles
+pg_dumpall -p 5433 -w -U postgres -f $workdir/pgdumpall_roles.sql -r -c -v
+
+## -t -> table spaces only
+pg_dumpall -p 5433 -w -U postgres -f $workdir/pgdumpall_tbs.sql  -t -c -v
+
+## --no-tablespaces -> backup all the cluster without tables spaces
+pg_dumpall -p 5433 -w -U postgres -v -c --no-tablespaces -f $workdir/pgdumpall_no_tbs.sql
+
+
 
 
 
