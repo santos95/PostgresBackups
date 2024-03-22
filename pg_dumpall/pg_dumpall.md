@@ -73,6 +73,12 @@ pg_dumpall -p 5433 -w -U postgres -f $workdir/pgdumpall_tbs.sql  -t -c -v
 ## --no-tablespaces -> backup all the cluster without tables spaces
 pg_dumpall -p 5433 -w -U postgres -v -c --no-tablespaces -f $workdir/pgdumpall_no_tbs.sql
 
+## -O no owner - skip restauration of object ownership - but create a backup of the ownership property for global objects
+    pg_dumpall -p 5433 -w -U postgres -v -O -f -f $workdir/pgdumpall_no_owners.sql
+
+## --no-comments - do not dump comments 
+    pg_dumpall -p 5433 -w -U postgres -v -O -f -f $workdir/pgdumpall_no_owners.sql
+
 
 
 
