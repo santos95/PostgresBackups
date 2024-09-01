@@ -77,7 +77,14 @@ pg_dumpall -p 5433 -w -U postgres -v -c --no-tablespaces -f $workdir/pgdumpall_n
     pg_dumpall -p 5433 -w -U postgres -v -O -f -f $workdir/pgdumpall_no_owners.sql
 
 ## --no-comments - do not dump comments 
-    pg_dumpall -p 5433 -w -U postgres -v -O -f -f $workdir/pgdumpall_no_owners.sql
+    pg_dumpall -p 5433 -w -U postgres -v --no-comments -f $workdir/pg_dumpall_no_comments.sql
+
+##  --column-inserts - change the copys with inserts with columns
+    pg_dumpall -p 5433 -w -U postgres -v --column-inserts -f $workdir/pg_dumpall_column_inserts.sql
+## --inserts - change the copys with inserts without columns
+    pg_dumpall -p 5433 -w -U postgres -v --inserts -f $workdir/pg_dumpall_inserts.sql
+
+
 
 
 
