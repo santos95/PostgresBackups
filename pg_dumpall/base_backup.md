@@ -129,6 +129,8 @@ psql -c "show wal_senders;"
 
 echo "restore_command = 'cp /mnt/backups/wal_archive/%f %p'" >> postgresql.auto.conf
 echo "recovery_target_name = 'pointime1'" >> postgresql.auto.conf
+
+#### to recovery to a not pre-stablish point in time we have to set the specific point in time in which, with the help of users and log files the crash events occurs, to recovery the database to the minimize the data loss at the minimum level. Close to the must recent time previous the crash occurs to reduce the data lost at minimum. To do that instead of add to the recovery file (postgresql.auto.conf) the recovery_target_name we set the recovery_target_time.
 echo "recovery_target_time = '2024-09-11 22:51:31'" >> postgresql.auto.conf
 
 #### the recovery target name referes to a pre-stablish point in time. There is other use-case when a event occurs and we have to restore to a not pre-stablish point in time. So, with the above we recovery to the point in time that we stablish. 
@@ -148,3 +150,18 @@ echo "recovery_target_time = '2024-09-11 22:51:31'" >> postgresql.auto.conf
 archive_command = 'test ! -f /mnt/backups/wal_archive/%f && cp %p /mnt/backups/wal_archive/%f'
 archive_command = 'test ! -f /mnt/backups/wal_archive_10/%f && cp %p /mnt/backups/wal_archive_10/%f'
     
+### RECOVERY TO A POINT IN TIME - POSTGRES <= 10 - for that the process is almost the same, but we have some differentes:
+
+### The files generated when we create the base backup: - with the option -R which include the generation of the recovery.conf file, we have for versions < 12 the postgres.auto.conf and the stanby.singnal file that indicates that postgres must start in recovery mode. For postgres version < 12, is almost the same, but generates the recovery.conf file, which store the parameters required to restore the database and indicates to postgres to start in recovery mode.
+pg_basebackup -p 5432 -D /mnt/backups/postgres10_basebackup/ -R -P -Ft -z --wal-method=none
+
+### modify the recovery.conf file
+echo "restore_command = 'cp /mnt/backups/wal_archive/%f %p'" >> recovery.conf
+echo "recovery_target_name = 'pointime1'" >> recovery.conf
+echo "recovery_target_time = '2024-09-11 22:51:31'" >> recovery.conf
+
+restore_command = 'cp /mnt/backups/wal_archive_10/%f %p'
+recovery_target_time = '2024-09-12 23:38:29'
+
+
+
