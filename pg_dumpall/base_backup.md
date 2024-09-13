@@ -51,7 +51,7 @@ psql -c "show wal_senders;"
 
 
 ## How to use the base backups for point in time recovery
-### To create a base backcup use the tool - pg_basebackup
+### To create a base backup use the tool - pg_basebackup
     pg_basebackup [options]
 
 #### important options
@@ -129,6 +129,7 @@ psql -c "show wal_senders;"
 
 echo "restore_command = 'cp /mnt/backups/wal_archive/%f %p'" >> postgresql.auto.conf
 echo "recovery_target_name = 'pointime1'" >> postgresql.auto.conf
+echo "recovery_target_time = '2024-09-11 22:51:31'" >> postgresql.auto.conf
 
 #### the recovery target name referes to a pre-stablish point in time. There is other use-case when a event occurs and we have to restore to a not pre-stablish point in time. So, with the above we recovery to the point in time that we stablish. 
 
@@ -144,5 +145,6 @@ echo "recovery_target_name = 'pointime1'" >> postgresql.auto.conf
 
 
 
-
+archive_command = 'test ! -f /mnt/backups/wal_archive/%f && cp %p /mnt/backups/wal_archive/%f'
+archive_command = 'test ! -f /mnt/backups/wal_archive_10/%f && cp %p /mnt/backups/wal_archive_10/%f'
     
